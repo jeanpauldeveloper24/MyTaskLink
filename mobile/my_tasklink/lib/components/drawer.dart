@@ -14,84 +14,116 @@ class AppDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
       backgroundColor: background,
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          _drawerHeader(),
+      child: SafeArea(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            _drawerHeader(),
 
-          _simpleItem(
-            context,
-            icon: Icons.home_outlined,
-            title: 'Accueil',
-            onTap: () => Navigator.pop(context),
-          ),
+            _simpleItem(
+              context,
+              icon: Icons.home_outlined,
+              title: 'Accueil',
+              onTap: () => Navigator.pop(context),
+            ),
 
-          _expandableSection(
-            icon: Icons.note_outlined,
-            title: 'Notes',
-            children: [
-              _subItem(context, 'Ajouter une note', Icons.add),
-              _subItem(context, 'Liste des notes', Icons.list_alt_outlined),
-            ],
-          ),
+            _expandableSection(
+              icon: Icons.note_outlined,
+              title: 'Notes',
+              children: [
+                _subItem(
+                  context,
+                  title: 'Ajouter une note',
+                  icon: Icons.add,
+                ),
+                _subItem(
+                  context,
+                  title: 'Liste des notes',
+                  icon: Icons.list_alt_outlined,
+                ),
+              ],
+            ),
 
-          _expandableSection(
-            icon: Icons.check_circle_outline,
-            title: 'Tâches',
-            children: [
-              _subItem(context, 'Nouvelle tâche', Icons.add_task_outlined),
-              _subItem(
-                context,
-                'Liste des tâches',
-                Icons.playlist_add_check_outlined,
-              ),
-            ],
-          ),
+            _expandableSection(
+              icon: Icons.check_circle_outline,
+              title: 'Tâches',
+              children: [
+                _subItem(
+                  context,
+                  title: 'Nouvelle tâche',
+                  icon: Icons.add_task_outlined,
+                ),
+                _subItem(
+                  context,
+                  title: 'Liste des tâches',
+                  icon: Icons.playlist_add_check_outlined,
+                ),
+              ],
+            ),
 
-          _expandableSection(
-            icon: Icons.contacts_outlined,
-            title: 'Contacts',
-            children: [
-              _subItem(context, 'Ajouter un contact', Icons.person_add_alt_outlined),
-              _subItem(context, 'Liste des contacts', Icons.list_alt_outlined),
-            ],
-          ),
+            _expandableSection(
+              icon: Icons.contacts_outlined,
+              title: 'Contacts',
+              children: [
+                _subItem(
+                  context,
+                  title: 'Ajouter un contact',
+                  icon: Icons.person_add_alt_outlined,
+                ),
+                _subItem(
+                  context,
+                  title: 'Liste des contacts',
+                  icon: Icons.list_alt_outlined,
+                ),
+              ],
+            ),
 
-          const Divider(),
+            const Divider(height: 32),
 
-          _simpleItem(
-            context,
-            icon: Icons.settings_outlined,
-            title: 'Paramètres',
-            onTap: () {},
-          ),
+            _simpleItem(
+              context,
+              icon: Icons.settings_outlined,
+              title: 'Paramètres',
+              onTap: () => Navigator.pop(context),
+            ),
 
-          const SizedBox(height: 12),
-        ],
+            const SizedBox(height: 12),
+          ],
+        ),
       ),
     );
   }
 
-  // 🔗 Header avec logo
+  // 🖼️ Header avec logo
   Widget _drawerHeader() {
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 48, 20, 24),
-      color: bluePrimary.withOpacity(0.1),
+      decoration: BoxDecoration(
+        color: bluePrimary.withOpacity(0.08),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // 🖼️ Logo
+          // 🔰 Logo
           Container(
             width: 64,
             height: 64,
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(18),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 8,
+                ),
+              ],
             ),
             child: Image.asset(
               'images/logo.png',
               fit: BoxFit.contain,
+              errorBuilder: (_, __, ___) =>
+                  const Icon(Icons.task_alt, size: 36),
             ),
           ),
 
@@ -120,7 +152,7 @@ class AppDrawer extends StatelessWidget {
     );
   }
 
-  // 📁 Section déroulante
+  // 📂 Section déroulante
   Widget _expandableSection({
     required IconData icon,
     required String title,
@@ -136,13 +168,19 @@ class AppDrawer extends StatelessWidget {
           color: textDark,
         ),
       ),
+      iconColor: bluePrimary,
+      collapsedIconColor: textDark.withOpacity(0.6),
       childrenPadding: const EdgeInsets.only(left: 16),
       children: children,
     );
   }
 
   // 📄 Sous-menu
-  Widget _subItem(BuildContext context, String title, IconData icon) {
+  Widget _subItem(
+    BuildContext context, {
+    required String title,
+    required IconData icon,
+  }) {
     return ListTile(
       leading: Icon(
         icon,
@@ -153,12 +191,10 @@ class AppDrawer extends StatelessWidget {
         title,
         style: GoogleFonts.inter(
           fontSize: 14,
-          color: textDark.withOpacity(0.7),
+          color: textDark.withOpacity(0.75),
         ),
       ),
-      onTap: () {
-        Navigator.pop(context);
-      },
+      onTap: () => Navigator.pop(context),
     );
   }
 
